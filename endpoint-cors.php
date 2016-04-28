@@ -127,7 +127,7 @@ else if ($method == "DELETE") {
     // window.postMessage
     if ($iframeRequest == true) {
         header("Content-Type: text/html");
-        echo json_encode($result)."<script src='http://10.0.2.2/jquery.fineuploader-4.1.1/iframe.xss.response-4.1.1.js'></script>";
+        echo json_encode($result)."<script src='http://{{SERVER_URL}}/{{FINE_UPLOADER_FOLDER}}/iframe.xss.response.js'></script>";
     } else {
         echo json_encode($result);
     }
@@ -145,20 +145,19 @@ else if ($method == "POST") {
     else {
         // Call handleUpload() with the name of the folder, relative to PHP's getcwd()
         $result = $uploader->handleUpload("files");
+    }
+    // To return a name used for uploaded file you can use the following line.
+    $result["uploadName"] = $uploader->getUploadName();
 
-        // To return a name used for uploaded file you can use the following line.
-        $result["uploadName"] = $uploader->getUploadName();
-
-        // iframe uploads require the content-type to be 'text/html' and
-        // return some JSON along with self-executing javascript (iframe.ss.response)
-        // that will parse the JSON and pass it along to Fine Uploader via
-        // window.postMessage
-        if ($iframeRequest == true) {
-            header("Content-Type: text/html");
-            echo json_encode($result)."<script src='http://{{SERVER_URL}}/{{FINE_UPLOADER_FOLDER}}/iframe.xss.response.js'></script>";
-        } else {
-            echo json_encode($result);
-        }
+    // iframe uploads require the content-type to be 'text/html' and
+    // return some JSON along with self-executing javascript (iframe.ss.response)
+    // that will parse the JSON and pass it along to Fine Uploader via
+    // window.postMessage
+    if ($iframeRequest == true) {
+        header("Content-Type: text/html");
+        echo json_encode($result)."<script src='http://{{SERVER_URL}}/{{FINE_UPLOADER_FOLDER}}/iframe.xss.response.js'></script>";
+    } else {
+        echo json_encode($result);
     }
 }
 else {
